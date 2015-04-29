@@ -40,7 +40,7 @@ class Dice:
 
         ones = self.values.count(1)
 
-        return (self.total(), ones)
+        return (self.values, ones)
 
     def total(self):
         """Return the integer value of the sum of the last roll of the dice."""
@@ -64,6 +64,11 @@ class Player:
         return "%s: %d points" % (self.name, self.score)
 
 
+    def add_points(self, points):
+        """Add points to the player's score"""
+        self.score = self.score + points
+
+
     def take_turn(self, dice):
         """Roll all three dice, decide whether to roll again or keep points."""
         still_rolling = True
@@ -77,10 +82,10 @@ class Player:
 
             if ones == 0:
                 # Prompt to keep rolling
-                running_total = running_total + roll
+                running_total = running_total + dice.total()
                 inp = raw_input("%d points on the line. Roll again? (Y/n) " % running_total)
                 if inp.strip().lower() == 'n':
-                    self.score = self.score + running_total
+                    self.add_points(running_total)
                     return
             elif ones == 1:
                 still_rolling = False
